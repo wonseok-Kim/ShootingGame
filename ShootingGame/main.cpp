@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 #include "Console.h"
+#include "ResourceManager.h"
+#include "Title.h"
 
 //--------------------------------------------------------------------
 // 화면 깜빡임을 없애기 위한 화면 버퍼.
@@ -79,40 +81,24 @@ void Buffer_Clear(void);
 void Sprite_Draw(int iX, int iY, char chSprite);
 
 
-
-
-
-
-
-
-
 int g_iX = 0;
 
-void main(void)
+int main(void)
 {
 	cs_Initial();
+	rm_LoadResources();
 
-	//--------------------------------------------------------------------
-	// 게임의 메인 루프
-	// 이 루프가  1번 돌면 1프레임 이다.
-	//--------------------------------------------------------------------
-	int iX = 0;
-	while (1)
+	Title* pTitle = rm_GetTitle();
+
+	int iCnt;
+	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
 	{
-		iX++;
-
-		// 이 부분이 랜더링 함수 역할
-		{
-			// 스크린 버퍼를 지움
-			Buffer_Clear();
-			// 스크린 버퍼에 스프라이트 출력
-			Sprite_Draw(10, iX, 'A');
-			// 스크린 버퍼를 화면으로 출력
-			Buffer_Flip();
-		}
-		Sleep(100);
-		// 프레임 맞추기용 대기 10 Frame
+		cs_MoveCursor(0, iCnt);
+		printf(pTitle->screen[iCnt]);
 	}
+
+	rm_ReleaseResources();
+	return 0;
 }
 
 
