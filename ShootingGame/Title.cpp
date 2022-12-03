@@ -1,23 +1,39 @@
 #include "stdafx.h"
+#include "Scene.h"
 #include "Title.h"
 
-static Title s_Title;
+Title g_Title;
 
-//static const char title[][dfSCREEN_WIDTH] = {
-//    "                                                                                ",
-//    "                                                                                ",
-//    "                                                                                "
-//                               Shooting Game
-//
-//
-//
-//                               > Game Start <
-//
-//                                  > Exit <
-//};
-
-bool title_Init()
+void title_Input()
 {
-	//"                 "
-	return true;
+    extern eScene g_Scene;
+
+    if (GetAsyncKeyState('A') & 0x8001)
+    {    
+    }
+
+
 }
+
+void title_Update(bool* out_bGameLoop)
+{
+    extern eScene g_Scene;
+
+    if (GetAsyncKeyState('A') & 0x8001)
+    {
+        g_Scene = eScene_Load;
+    }
+    if (GetAsyncKeyState('B') & 0x8001)
+    {
+        *out_bGameLoop = false;
+    }
+    
+    for (int i = 0; i < dfSCREEN_HEIGHT; ++i)
+    {
+        cs_MoveCursor(0, i);
+        printf("%s", g_Title.screen[i]);
+    }
+}
+
+void title_Render()
+{}
