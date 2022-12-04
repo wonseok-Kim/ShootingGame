@@ -1,35 +1,49 @@
 #include "stdafx.h"
 #include "Stage.h"
 
-Stage g_Stage[30];
+#include "Enemy.h"
+
+Stage g_Stages[MAX_STAGES];
 int g_nStages = 0;
+static bool s_bInit = false;
+
+void stage_Init()
+{
+	for (int i = 0; i < MAX_STAGES; ++i)
+	{
+		g_Stages[i].nEnemies = 0;
+	}
+	s_bInit = true;
+}
 
 void stage_SetNumberOfStage(int nStages)
 {
 	g_nStages = nStages;
 }
 
-bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int hp, int movingPatternIdx, int shotInterval)
+bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int enemyInfoIdx)
 {
-	if (stageIdx < 0 && stageIdx >= g_nStages)
+	if (!s_bInit)
 	{
-		PrintError("stageIdx %d가 g_nStages 보다 크다", stageIdx);
+		PrintError("g_Stages 초기화 해줘야할 변수 nEnemies가 있음");
+		return false;
+	}
+	if (stageIdx < 0 || stageIdx >= g_nStages)
+	{
+		PrintError("stageIdx %d가 올바르지 않음.", stageIdx);
 		return false;
 	}
 
-	int* pnEnemies = &g_Stage[stageIdx].nEnemies;
-	Enemy* pEnemyList = g_Stage[stageIdx].enemyList;
+	int nEnemies = g_Stages[stageIdx].nEnemies;
+	Enemy* pEnemy = &g_Stages[stageIdx].enemyList[nEnemies];
 
-	pEnemyList[(*pnEnemies)].obj.visible = true;
-	pEnemyList[(*pnEnemies)].obj.x = x;
-	pEnemyList[(*pnEnemies)].obj.y = y;
-	pEnemyList[(*pnEnemies)].obj.sprite = sprite;
+	pEnemy->obj.visible = true;
+	pEnemy->obj.x = x;
+	pEnemy->obj.y = y;
+	pEnemy->obj.sprite = sprite;
 
-	pEnemyList[(*pnEnemies)].hp = hp;
-	// TODO: moving pattern 삽입
-	pEnemyList[(*pnEnemies)].shotInterval = shotInterval;
+	enemy_GetInfo(enemyInfoIdx, &pEnemy->hp, &pEnemy->movingPattern, &pEnemy->shotInterval);
 
-	++(*pnEnemies);
-
+	++(g_Stages[stageIdx].nEnemies);
 	return true;
 }

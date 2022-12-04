@@ -1,4 +1,4 @@
 3
-Enemy1.txt
-Enemy2.txt
-Enemy3.txt
+res/Enemy/Enemy1.txt
+res/Enemy/Enemy2.txt
+res/Enemy/Enemy3.txt

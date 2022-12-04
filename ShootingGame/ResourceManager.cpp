@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ResourceManager.h"
 
+#include "Enemy.h"
 #include "MovingPattern.h"
 #include "Stage.h"
 #include "Title.h"
@@ -122,23 +123,14 @@ bool loadStageInfo()
 		}
 
 		char buffer[128];
+		size_t length;
 		int x;
 		int y = 0;
 
 		while (!feof(pStageFile))
 		{
-			fgets(buffer, 128, pStageFile);
-
-			char* pNewLine = strchr(buffer, '\n');
-			if (pNewLine)
+			if (!util_ReadLineInFile(pStageFile, buffer, 128, &length))
 			{
-				*pNewLine = '\0';
-			}
-
-			int length = (int)strlen(buffer);
-			if (length > dfSCREEN_WIDTH - 1)
-			{
-				PrintError("dfSCREEN_WIDTH 범위를 넘어선 표현\n");
 				fclose(pStageFile);
 				return false;
 			}
@@ -147,11 +139,9 @@ bool loadStageInfo()
 			{
 				if ('A' <= buffer[x] && buffer[x] <= 'Z')
 				{
-					//stage_AddEnemy(x, y, buffer[x], movePattern, fpsshottrigger);
-
+					stage_AddEnemy(i, x, y, buffer[x], 'A' - buffer[x]);
 				}
 			}
-
 			++y;
 		}
 
@@ -163,6 +153,76 @@ bool loadStageInfo()
 
 bool loadEnemyInfo()
 {
+	char enemyFilenames[MAX_ENEMY_INFOS][64];
+	FILE* pFile;
+	errno_t err;
+	int nRead;
+	int nEnemyFiles;
+	int i;
+
+	// ========================= //
+	// read EnemyInfo file       //
+	// ========================= //
+	{
+		const char* filename = "res/Enemy/EnemyInfo.txt";
+
+		err = fopen_s(&pFile, filename, "r");
+		if (err != 0)
+		{
+			PrintError("%s fopen err", filename);
+			return false;
+		}
+
+		nRead = fscanf_s(pFile, "%d", &nEnemyFiles);
+		if (nRead != 1)
+		{
+			PrintError("%s fscanf err\n", filename);
+			fclose(pFile);
+			return false;
+		}
+
+		for (i = 0; i < nEnemyFiles; ++i)
+		{
+			nRead = fscanf_s(pFile, "%s", enemyFilenames[i],
+				(unsigned)_countof(enemyFilenames[i]));
+			if (nRead != 1)
+			{
+				PrintError("%s fscanf err\n", filename);
+				fclose(pFile);
+				return false;
+			}
+		}
+
+		fclose(pFile);
+	}
+
+	int hp;
+	int movingPatternIdx;
+	int shotInterval;	
+
+	// ============================ //
+	// read each movepattern files  //
+	// ============================ //
+	for (i = 0; i < nEnemyFiles; ++i)
+	{
+		err = fopen_s(&pFile, enemyFilenames[i], "r");
+		if (err != 0)
+		{
+			PrintError("%s file fopen err\n", enemyFilenames[i]);
+			return false;
+		}
+
+		nRead = fscanf_s(pFile, "%d %d %d", &hp, &movingPatternIdx, &shotInterval);
+		if (nRead != 3)
+		{
+			PrintError("%s file scanf err", enemyFilenames[i]);
+			return false;
+		}
+
+		enemy_AddInfo(hp, movingPatternIdx, shotInterval);
+		fclose(pFile);
+	}
+
 	return true;
 }
 

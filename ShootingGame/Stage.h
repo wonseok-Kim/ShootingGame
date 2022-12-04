@@ -3,16 +3,15 @@
 #include "Enemy.h"
 #include "Player.h"
 
-
-
 struct Stage
 {
     Enemy enemyList[MAX_ENEMIES];
     Player player;
-    int nEnemies = 0;
+    int nEnemies;
 };
 
+void stage_Init();
 void stage_SetNumberOfStage(int nStages);
-bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int hp, int movingPatternIdx, int shotInterval);
+bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int enemyInfoIdx);
 
 

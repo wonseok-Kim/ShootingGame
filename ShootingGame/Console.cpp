@@ -54,6 +54,6 @@ void cs_DrawSprite(int iX, int iY, char chSprite)
 {
 	if (iX < 0 || iY < 0 || iX >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)
 		return;
-
+	
 	s_Console.screenBuffer[iY][iX] = chSprite;
 }

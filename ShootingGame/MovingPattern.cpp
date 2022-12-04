@@ -6,8 +6,6 @@ int g_nMovingPatterns = 0;
 
 bool mp_AddPattern(int interval, int nLength, COORD* coordList)
 {
-
-
 	g_MovingPatterns[g_nMovingPatterns].curIdx = 0;
 	g_MovingPatterns[g_nMovingPatterns].fpsInterval = interval;
 	g_MovingPatterns[g_nMovingPatterns].nLength = nLength;
