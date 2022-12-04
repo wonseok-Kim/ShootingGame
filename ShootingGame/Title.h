@@ -6,6 +6,6 @@ struct Title {
 
 void title_Input();
 
-void title_Update(bool* out_bGameLoop);
+void title_Update();
 
 void title_Render();

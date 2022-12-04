@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "Scene.h"
 #include "Title.h"
+
+#include "Game.h"
+#include "Scene.h"
 
 Title g_Title;
 
 void title_Input()
 {
-    extern eScene g_Scene;
-
     if (GetAsyncKeyState('A') & 0x8001)
     {    
     }
@@ -15,17 +15,18 @@ void title_Input()
 
 }
 
-void title_Update(bool* out_bGameLoop)
+void title_Update()
 {
-    extern eScene g_Scene;
+    extern Game g_Game;
 
     if (GetAsyncKeyState('A') & 0x8001)
     {
-        g_Scene = eScene_Load;
+        // TODO: 나중에 수정하기 테스트할라고 Game으로 해둠.
+        g_Game.scene = eScene_Game;
     }
     if (GetAsyncKeyState('B') & 0x8001)
     {
-        *out_bGameLoop = false;
+        g_Game.bGameLoop = false;
     }
     
     for (int i = 0; i < dfSCREEN_HEIGHT; ++i)
@@ -36,4 +37,6 @@ void title_Update(bool* out_bGameLoop)
 }
 
 void title_Render()
-{}
+{
+
+}

@@ -2,73 +2,58 @@
 
 #include "Console.h"
 
-HANDLE  hConsole;
+static Console s_Console;
 
-//-------------------------------------------------------------
-// 이렇게 씁니다.
-//
-// #incude <stdio.h>
-// #include <windows.h>
-// #incude "Console.h"
-//
-// void main(void)
-// {
-//		cs_Initial();
-//
-//		cs_MoveCursor(0, 0);	// 커서를 0, 0 위치로
-//		printf("abcde");		// 0, 0 위치에 글씨를 찍음
-//		cs_MoveCursor(20, 10);	// 커서를 20, 10 위치로
-//		printf("abcde");		// 20, 10 위치에 글씨를 찍음
-//
-// }
-//-------------------------------------------------------------
-
-//-------------------------------------------------------------
-// 콘솔 제어를 위한 준비 작업.
-//
-//-------------------------------------------------------------
-void cs_Initial(void)
+void cs_Init(void)
 {
 	CONSOLE_CURSOR_INFO stConsoleCursor;
-
-	//-------------------------------------------------------------
-	// 화면의 커서를 안보이게끔 설정한다.
-	//-------------------------------------------------------------
 	stConsoleCursor.bVisible = FALSE;
 	stConsoleCursor.dwSize = 1;
-
-
-	//-------------------------------------------------------------
-	// 콘솔화면 (스텐다드 아웃풋) 핸들을 구한다.
-	//-------------------------------------------------------------
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleCursorInfo(hConsole, &stConsoleCursor);
+		
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &stConsoleCursor);
 }
 
-//-------------------------------------------------------------
-// 콘솔 화면의 커서를 X, Y 좌표로 이동시킨다.
-//
-//-------------------------------------------------------------
 void cs_MoveCursor(int iPosX, int iPosY)
 {
 	COORD stCoord;
 	stCoord.X = iPosX;
 	stCoord.Y = iPosY;
-	//-------------------------------------------------------------
-	// 원하는 위치로 커서를 이동시킨다.
-	//-------------------------------------------------------------
-	SetConsoleCursorPosition(hConsole, stCoord);
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), stCoord);
 }
 
-//-------------------------------------------------------------
-// 콘솔 화면을 조기화 한다.
-//
-//-------------------------------------------------------------
 void cs_ClearScreen(void)
 {
-	int iCountX, iCountY;
 	DWORD dw;
 
 	FillConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE), ' ', 100 * 100, { 0, 0 }, &dw);
+}
 
+void cs_FlipBuffer(void)
+{
+	int iCnt;
+	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
+	{
+		cs_MoveCursor(0, iCnt);
+		printf(s_Console.screenBuffer[iCnt]);
+	}
+}
+
+void cs_ClearBuffer(void)
+{
+	int iCnt;
+	memset(s_Console.screenBuffer, ' ', dfSCREEN_WIDTH * dfSCREEN_HEIGHT);
+
+	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
+	{
+		s_Console.screenBuffer[iCnt][dfSCREEN_WIDTH - 1] = '\0';
+	}
+
+}
+
+void cs_DrawSprite(int iX, int iY, char chSprite)
+{
+	if (iX < 0 || iY < 0 || iX >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)
+		return;
+
+	s_Console.screenBuffer[iY][iX] = chSprite;
 }

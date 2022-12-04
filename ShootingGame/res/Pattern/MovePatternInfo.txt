@@ -1,0 +1,4 @@
+3
+res/Pattern/MovePattern1.txt
+res/Pattern/MovePattern2.txt
+res/Pattern/MovePattern3.txt

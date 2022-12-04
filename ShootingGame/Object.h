@@ -2,8 +2,14 @@
 
 struct Object
 {
-	bool Visible;
-	char Sprite;
-	int X;
-	int Y;
+	bool visible;
+	char sprite;
+	int x;
+	int y;
+};
+
+enum eObject
+{
+	eObject_Player,
+	eObject_Enemy
 };

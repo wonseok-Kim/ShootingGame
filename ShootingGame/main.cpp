@@ -1,79 +1,48 @@
+#pragma comment(lib, "winmm")
+
 #include "stdafx.h"
 
-#include "Console.h"
-#include "ResourceManager.h"
-#include "Scene.h"
+#include "Game.h"
 #include "Title.h"
-
-char szScreenBuffer[dfSCREEN_HEIGHT][dfSCREEN_WIDTH];
-
-void Buffer_Flip(void);
-void Buffer_Clear(void);
-void Sprite_Draw(int iX, int iY, char chSprite);
 
 int main(void)
 {
-	cs_Initial();
-	if (!rm_LoadTitle())
+	extern Game g_Game;
+
+	if (!gm_Init())
 	{
 		return 1;
 	}
-	
-	bool bGameLoop = true;
-	while (bGameLoop)
+
+	timeBeginPeriod(1);
+
+	while (g_Game.bGameLoop)
 	{
-		extern eScene g_Scene;
-		switch (g_Scene)
+		switch (g_Game.scene)
 		{
 		case eScene_Title:
-			title_Update(&bGameLoop);
+			title_Update();
 			break;
 
 		case eScene_Load:
-			rm_LoadResources();
 			break;
 
 		case eScene_Game:
+			gm_Run();
 			break;
 
 		default:
-			assert(0);
+			Assert(0, "not reachable");
 		}
 	}
 
-	rm_ReleaseResources();
+	timeEndPeriod(1);
+
+	gm_Release();
+	
 	return 0;
 }
 
-void Buffer_Flip(void)
-{
-	int iCnt;
-	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
-	{
-		cs_MoveCursor(0, iCnt);
-		printf(szScreenBuffer[iCnt]);
-	}
-}
-
-void Buffer_Clear(void)
-{
-	int iCnt;
-	memset(szScreenBuffer, ' ', dfSCREEN_WIDTH * dfSCREEN_HEIGHT);
-
-	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
-	{
-		szScreenBuffer[iCnt][dfSCREEN_WIDTH - 1] = '\0';
-	}
-
-}
-
-void Sprite_Draw(int iX, int iY, char chSprite)
-{
-	if (iX < 0 || iY < 0 || iX >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)
-		return;
-
-	szScreenBuffer[iY][iX] = chSprite;
-}
 
 
 
