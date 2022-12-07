@@ -28,10 +28,10 @@ bool rm_LoadResources()
 		return false;
 	}
 
-	//if (!loadStageInfo())
-	//{
-	//	return false;
-	//}
+	if (!loadStageInfo())
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -82,7 +82,7 @@ static bool loadTitle()
 bool loadStageInfo()
 {
 	FILE* pStageInfoFile;
-	errno_t err = fopen_s(&pStageInfoFile, "res/StageInfo.txt", "r");
+	errno_t err = fopen_s(&pStageInfoFile, "res/Stage/StageInfo.txt", "r");
 	if (err != 0)
 	{
 		PrintError("StageInfo.txt open err\n");
@@ -98,6 +98,7 @@ bool loadStageInfo()
 		fclose(pStageInfoFile);
 		return false;
 	}
+	stage_Init();
 	stage_SetNumberOfStage(nStages);
 
 	for (int i = 0; i < nStages; ++i)
@@ -140,6 +141,10 @@ bool loadStageInfo()
 				if ('A' <= buffer[x] && buffer[x] <= 'Z')
 				{
 					stage_AddEnemy(i, x, y, buffer[x], 'A' - buffer[x]);
+				}
+				if ('#' == buffer[x])
+				{
+					stage_AddPlayer(i, x, y, buffer[x]);
 				}
 			}
 			++y;

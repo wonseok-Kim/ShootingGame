@@ -1,9 +1,10 @@
-#pragma comment(lib, "winmm")
 
 #include "stdafx.h"
 
 #include "Game.h"
 #include "Title.h"
+
+#pragma comment(lib, "winmm")
 
 int main(void)
 {
@@ -25,6 +26,7 @@ int main(void)
 			break;
 
 		case eScene_Load:
+			gm_Load();
 			break;
 
 		case eScene_Game:

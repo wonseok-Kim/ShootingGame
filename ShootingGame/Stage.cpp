@@ -41,9 +41,27 @@ bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int enemyInfoIdx)
 	pEnemy->obj.x = x;
 	pEnemy->obj.y = y;
 	pEnemy->obj.sprite = sprite;
+	pEnemy->movingPatternIdx = 0;
 
-	enemy_GetInfo(enemyInfoIdx, &pEnemy->hp, &pEnemy->movingPattern, &pEnemy->shotInterval);
+	enemy_GetInfo(enemyInfoIdx, &pEnemy->hp, &pEnemy->movingPatternType, &pEnemy->shotInterval);
 
 	++(g_Stages[stageIdx].nEnemies);
+	return true;
+}
+
+bool stage_AddPlayer(int stageIdx, int x, int y, char sprite)
+{
+	// TODO: stageIDx assert로 체크
+
+	Player* pPlayer = &g_Stages[stageIdx].player;
+	
+	pPlayer->obj.visible = true;
+	pPlayer->obj.x = x;
+	pPlayer->obj.y = y;
+	pPlayer->obj.sprite = sprite;
+
+	// TODO: 나중에 파일로 빼기
+	pPlayer->hp = 3;	
+
 	return true;
 }

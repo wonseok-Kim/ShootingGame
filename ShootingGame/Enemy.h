@@ -9,16 +9,17 @@ struct Enemy
 {
 	Object obj;
 	int hp;
-	MovingPattern movingPattern;
+	int movingPatternType;
+	int movingPatternIdx;
 	int shotInterval; // fps ¥‹¿ß
 };
 
 struct EnemyInfo
 {
 	int hp;
-	int movingPatternIdx;
+	int movingPatternType;
 	int shotInterval;
 };
 
-bool enemy_AddInfo(int hp, int movingPatternIdx, int shotInterval);
-void enemy_GetInfo(int enemyInfoIdx, int* out_hp, int* out_movingPatternIdx, int* out_shotInterval);
+bool enemy_AddInfo(int hp, int movingPatternType, int shotInterval);
+void enemy_GetInfo(int enemyInfoIdx, int* out_hp, int* movingPatternType, int* out_shotInterval);

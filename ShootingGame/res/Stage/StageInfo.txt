@@ -1,4 +1,4 @@
-3
-Stage1.txt
-Stage2.txt
-Stage3.txt
+1
+res/Stage/Stage1.txt
+res/Stage/Stage2.txt
+res/Stage/Stage3.txt

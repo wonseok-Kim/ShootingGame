@@ -13,5 +13,6 @@ struct Stage
 void stage_Init();
 void stage_SetNumberOfStage(int nStages);
 bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int enemyInfoIdx);
+bool stage_AddPlayer(int stageIdx, int x, int y, char sprite);
 
 

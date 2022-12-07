@@ -13,3 +13,5 @@ enum eObject
 	eObject_Player,
 	eObject_Enemy
 };
+
+void obj_Draw(const Object* obj);

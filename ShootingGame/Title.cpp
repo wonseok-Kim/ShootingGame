@@ -20,9 +20,9 @@ void title_Update()
     extern Game g_Game;
 
     if (GetAsyncKeyState('A') & 0x8001)
-    {
-        // TODO: 나중에 수정하기 테스트할라고 Game으로 해둠.
-        g_Game.scene = eScene_Game;
+    {        
+        g_Game.scene = eScene_Load;
+        g_Game.curStageIdx = 0;
     }
     if (GetAsyncKeyState('B') & 0x8001)
     {

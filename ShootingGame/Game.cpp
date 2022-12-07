@@ -6,62 +6,91 @@
 
 Game g_Game;
 
+bool gm_Load()
+{
+	extern Stage g_Stages[];
+	extern int g_nStages;
+
+	if (g_Game.curStageIdx >= g_nStages)
+	{
+		PrintError("Invalid idx. curStageIdx: %d, g_nStages: %d\n", g_Game.curStageIdx, g_nStages);
+		// TODO: °í¹Î
+		// g_Game.bGameLoop = false;
+		return false;
+	}
+
+	memcpy_s(&g_Game.stage, sizeof(Stage), &g_Stages[g_Game.curStageIdx], sizeof(Stage));
+
+	g_Game.scene = eScene_Game;
+	return true;
+}
+
 bool gm_Init()
 {
-    cs_Init();
-    if (!rm_LoadResources())
-    {
-        return false;
-    }
+	cs_Init();
+	if (!rm_LoadResources())
+	{
+		return false;
+	}
 
-    g_Game.bGameLoop = true;
-    g_Game.scene = eScene_Title;
-    g_Game.curStageIdx = 0;    
+	g_Game.bGameLoop = true;
+	g_Game.scene = eScene_Title;
+	g_Game.curStageIdx = 0;
 
-    return true;
+	return true;
 }
 
 void gm_Run()
 {
-    constexpr DWORD FRAME_PER_SEC = 50;
-    constexpr DWORD MILLI_SEC_PER_FRAME  = 1000 / 50;
+	Enemy* enemyList = g_Game.stage.enemyList;
+	int nEnemies = g_Game.stage.nEnemies;
+	Player* pPlayer = &g_Game.stage.player;
 
-    static DWORD frameCount = 0;
-    static DWORD timeElapsed = 0;
-    static DWORD timer_1sec = 0;
-    static DWORD lastTime = timeGetTime();
+	int xMove = 0;
+	int yMove = 0;
 
-    DWORD curTime = timeGetTime();
-    DWORD deltaTime = curTime - lastTime;
-    lastTime = curTime;
-      
-    timeElapsed += deltaTime;
-    timer_1sec += deltaTime;    
+	// input
+	if (GetAsyncKeyState(VK_LEFT) & 0x8001)
+	{
+		--xMove;
+	}
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8001)
+	{
+		++xMove;
+	}
+	if (GetAsyncKeyState(VK_UP) & 0x8001)
+	{
+		--yMove;
+	}
+	if (GetAsyncKeyState(VK_DOWN) & 0x8001)
+	{
+		++yMove;
+	}
 
-    ++frameCount;
+	// logic
+	pPlayer->obj.x += xMove;
+	pPlayer->obj.y += yMove;
 
-    if (timer_1sec > 1000)
-    {
-        printf("\n%d\n", timeElapsed);
-        printf("%d\n", frameCount);
-        printf("%f\n", frameCount / (timeElapsed * 0.001f));
+	
 
-        timer_1sec = 0;
-    }
-    
-    // Input
-    // Logic
-    // Render    
+	// render
+	cs_ClearBuffer();
 
-   
+	for (int i = 0; i < nEnemies; ++i)
+	{
+		obj_Draw(&enemyList[i].obj);		
+	}
+	obj_Draw(&pPlayer->obj);
+	
+	cs_FlipBuffer();
 
-    Sleep(MILLI_SEC_PER_FRAME - (timeGetTime() - curTime));    
+	Sleep(50);
 }
 
 bool gm_Release()
 {
-    rm_ReleaseResources();
+	rm_ReleaseResources();
 
 
-    return true;
+	return true;
 }

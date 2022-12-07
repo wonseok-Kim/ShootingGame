@@ -11,6 +11,8 @@ void cs_Init(void)
 	stConsoleCursor.dwSize = 1;
 		
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &stConsoleCursor);
+
+	cs_ClearBuffer();
 }
 
 void cs_MoveCursor(int iPosX, int iPosY)

@@ -11,6 +11,8 @@ struct Game
 	Stage stage;
 };
 
+bool gm_Load();
+
 bool gm_Init();
 void gm_Run();
 bool gm_Release();
