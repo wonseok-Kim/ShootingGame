@@ -16,7 +16,7 @@ int main(void)
 	}
 
 	timeBeginPeriod(1);
-
+		
 	while (g_Game.bGameLoop)
 	{
 		switch (g_Game.scene)
@@ -37,6 +37,8 @@ int main(void)
 			Assert(0, "not reachable");
 		}
 	}
+
+
 
 	timeEndPeriod(1);
 

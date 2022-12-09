@@ -140,7 +140,7 @@ bool loadStageInfo()
 			{
 				if ('A' <= buffer[x] && buffer[x] <= 'Z')
 				{
-					stage_AddEnemy(i, x, y, buffer[x], 'A' - buffer[x]);
+					stage_AddEnemy(i, x, y, buffer[x], buffer[x] - 'A');
 				}
 				if ('#' == buffer[x])
 				{
@@ -204,6 +204,7 @@ bool loadEnemyInfo()
 	int hp;
 	int movingPatternIdx;
 	int shotInterval;	
+	int shotRandom;
 
 	// ============================ //
 	// read each movepattern files  //
@@ -217,14 +218,15 @@ bool loadEnemyInfo()
 			return false;
 		}
 
-		nRead = fscanf_s(pFile, "%d %d %d", &hp, &movingPatternIdx, &shotInterval);
-		if (nRead != 3)
+		nRead = fscanf_s(pFile, "%d %d %d %d", 
+			&hp, &movingPatternIdx, &shotInterval, &shotRandom);
+		if (nRead != 4)
 		{
 			PrintError("%s file scanf err", enemyFilenames[i]);
 			return false;
 		}
 
-		enemy_AddInfo(hp, movingPatternIdx, shotInterval);
+		enemy_AddInfo(hp, movingPatternIdx - 1, shotInterval, shotRandom);
 		fclose(pFile);
 	}
 

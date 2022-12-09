@@ -50,6 +50,9 @@
     <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -59,9 +62,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MovableObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
@@ -89,6 +89,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

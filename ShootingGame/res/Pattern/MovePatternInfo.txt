@@ -1,4 +1,11 @@
-3
+6
 res/Pattern/MovePattern1.txt
 res/Pattern/MovePattern2.txt
 res/Pattern/MovePattern3.txt
+res/Pattern/MovePattern4.txt
+res/Pattern/MovePattern5.txt
+res/Pattern/MovePattern6.txt
+
+각 무브패턴 파일에 적는 순서
+
+fpsInterval, 총 이동 좌표 개수

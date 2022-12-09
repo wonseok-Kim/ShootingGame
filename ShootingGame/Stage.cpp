@@ -21,6 +21,11 @@ void stage_SetNumberOfStage(int nStages)
 	g_nStages = nStages;
 }
 
+int stage_GetNumberOfStage()
+{
+	return g_nStages;
+}
+
 bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int enemyInfoIdx)
 {
 	if (!s_bInit)
@@ -43,7 +48,11 @@ bool stage_AddEnemy(int stageIdx, int x, int y, char sprite, int enemyInfoIdx)
 	pEnemy->obj.sprite = sprite;
 	pEnemy->movingPatternIdx = 0;
 
-	enemy_GetInfo(enemyInfoIdx, &pEnemy->hp, &pEnemy->movingPatternType, &pEnemy->shotInterval);
+	enemy_GetInfo(enemyInfoIdx, 
+		&pEnemy->hp, 
+		&pEnemy->movingPatternType, 
+		&pEnemy->shotInterval,
+		&pEnemy->shotRandom);
 
 	++(g_Stages[stageIdx].nEnemies);
 	return true;

@@ -7,8 +7,12 @@ struct Game
 {
 	bool bGameLoop;
 	eScene scene;
-	int curStageIdx;
+	DWORD fps;
+	DWORD frameCount;
+	DWORD gameTick;
 	Stage stage;
+	int curStageIdx;
+	int nMaxStages;
 };
 
 bool gm_Load();

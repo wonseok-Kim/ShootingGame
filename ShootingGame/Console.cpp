@@ -1,6 +1,7 @@
 #include "stdafx.h"
-
 #include "Console.h"
+
+#include <stdarg.h>
 
 static Console s_Console;
 
@@ -33,7 +34,8 @@ void cs_ClearScreen(void)
 void cs_FlipBuffer(void)
 {
 	int iCnt;
-	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
+
+	for (iCnt = 0; iCnt < TEST_HEIGHT; iCnt++)
 	{
 		cs_MoveCursor(0, iCnt);
 		printf(s_Console.screenBuffer[iCnt]);
@@ -43,13 +45,24 @@ void cs_FlipBuffer(void)
 void cs_ClearBuffer(void)
 {
 	int iCnt;
-	memset(s_Console.screenBuffer, ' ', dfSCREEN_WIDTH * dfSCREEN_HEIGHT);
-
+	memset(&s_Console.screenBuffer[s_Console.top], ' ', dfSCREEN_WIDTH * dfSCREEN_HEIGHT);
+		
 	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
+	{
+		s_Console.screenBuffer[iCnt + s_Console.top][dfSCREEN_WIDTH - 1] = '\0';
+	}
+
+}
+
+void cs_AllClear()
+{
+	int iCnt;
+	memset(s_Console.screenBuffer, ' ', dfSCREEN_WIDTH * TEST_HEIGHT);
+
+	for (iCnt = 0; iCnt < TEST_HEIGHT; iCnt++)
 	{
 		s_Console.screenBuffer[iCnt][dfSCREEN_WIDTH - 1] = '\0';
 	}
-
 }
 
 void cs_DrawSprite(int iX, int iY, char chSprite)
@@ -57,5 +70,16 @@ void cs_DrawSprite(int iX, int iY, char chSprite)
 	if (iX < 0 || iY < 0 || iX >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)
 		return;
 	
-	s_Console.screenBuffer[iY][iX] = chSprite;
+	s_Console.screenBuffer[iY + s_Console.top][iX] = chSprite;
+}
+
+void cs_SetTopInfoBuffer(const char* format, ...)
+{
+	memset(s_Console.screenBuffer[0], ' ', dfSCREEN_WIDTH);
+	s_Console.screenBuffer[0][dfSCREEN_WIDTH - 1] = '\0';
+
+	va_list args;	
+	va_start(args, format);
+	vsprintf_s(s_Console.screenBuffer[0], dfSCREEN_WIDTH, format, args);
+	va_end(args);
 }

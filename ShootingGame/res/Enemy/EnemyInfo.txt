@@ -1,4 +1,13 @@
-3
+6
 res/Enemy/Enemy1.txt
 res/Enemy/Enemy2.txt
 res/Enemy/Enemy3.txt
+res/Enemy/Enemy4.txt
+res/Enemy/Enemy5.txt
+res/Enemy/Enemy6.txt
+
+각 Enemy 파일에 적는 순서
+hp
+movingPatternIdx
+shotInterval
+shotRandom

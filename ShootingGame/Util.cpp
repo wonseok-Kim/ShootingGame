@@ -48,3 +48,12 @@ bool util_ReadLineInFile(FILE* pFile, char* buffer, int bufferCount, size_t* out
 
 	return true;
 }
+
+
+// [min, max] ·£´ý °ª ¹ÝÈ¯
+int util_randInt(int min, int max)
+{
+	float random = (float) rand() / RAND_MAX;
+
+	return min + (int) (random * (max - min));
+}
