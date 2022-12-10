@@ -1,19 +1,31 @@
 #include "stdafx.h"
-#include "ResourceManager.h"
 
 #include "Enemy.h"
 #include "MovingPattern.h"
 #include "Stage.h"
-#include "Title.h"
+#include "Screen.h"
 
 static bool loadTitle();
+static bool loadLoseScreen();
+static bool loadWinScreen();
+
 static bool loadStageInfo();
 static bool loadEnemyInfo();
 static bool loadMovingPatternInfo();
 
-bool rm_LoadResources()
+bool LoadResources()
 {
 	if (!loadTitle())
+	{
+		return false;
+	}
+
+	if (!loadLoseScreen())
+	{
+		return false;
+	}
+
+	if (!loadWinScreen())
 	{
 		return false;
 	}
@@ -36,49 +48,6 @@ bool rm_LoadResources()
 	return true;
 }
 
-bool rm_ReleaseResources()
-{
-
-	return false;
-}
-
-static bool loadTitle()
-{
-	extern Title g_Title;
-
-	memset(g_Title.screen, ' ', sizeof(g_Title.screen));
-	for (int i = 0; i < dfSCREEN_HEIGHT; ++i)
-	{
-		g_Title.screen[i][dfSCREEN_WIDTH - 1] = '\0';
-	}
-
-	FILE* pFile;
-	errno_t err = fopen_s(&pFile, "res/TitleScreen.txt", "r");
-	if (err != 0)
-	{
-		PrintError("title file open err\n");
-		return false;
-	}
-
-	char buffer[128];
-	size_t length;
-	int line = 0;
-
-	while (!feof(pFile))
-	{
-		if (!util_ReadLineInFile(pFile, buffer, _countof(buffer), &length))
-		{
-			fclose(pFile);
-			return false;
-		}
-
-		memcpy_s(g_Title.screen[line++], dfSCREEN_WIDTH, buffer, length);
-	}
-
-	fclose(pFile);
-	return true;
-}
-
 bool loadStageInfo()
 {
 	FILE* pStageInfoFile;
@@ -97,8 +66,7 @@ bool loadStageInfo()
 		PrintError("scanf StageInfo.txt error\n");
 		fclose(pStageInfoFile);
 		return false;
-	}
-	stage_Init();
+	}	
 	stage_SetNumberOfStage(nStages);
 
 	for (int i = 0; i < nStages; ++i)
@@ -136,7 +104,7 @@ bool loadStageInfo()
 				return false;
 			}
 
-			for (x = 0; x < length; ++x)
+			for (x = 0; x < (int) length; ++x)
 			{
 				if ('A' <= buffer[x] && buffer[x] <= 'Z')
 				{
@@ -203,8 +171,10 @@ bool loadEnemyInfo()
 
 	int hp;
 	int movingPatternIdx;
-	int shotInterval;	
+	int shotInterval;
 	int shotRandom;
+	int nBullets;
+	COORD dirBullet[9];
 
 	// ============================ //
 	// read each movepattern files  //
@@ -218,15 +188,25 @@ bool loadEnemyInfo()
 			return false;
 		}
 
-		nRead = fscanf_s(pFile, "%d %d %d %d", 
-			&hp, &movingPatternIdx, &shotInterval, &shotRandom);
-		if (nRead != 4)
+		nRead = fscanf_s(pFile, "%d %d %d %d %d",
+			&hp, &movingPatternIdx, &shotInterval, &shotRandom, &nBullets);
+		if (nRead != 5)
 		{
 			PrintError("%s file scanf err", enemyFilenames[i]);
 			return false;
 		}
 
-		enemy_AddInfo(hp, movingPatternIdx - 1, shotInterval, shotRandom);
+		for (int cnt = 0; cnt < nBullets; ++cnt)
+		{
+			nRead = fscanf_s(pFile, "%hd, %hd", &dirBullet[cnt].X, &dirBullet[cnt].Y);
+			if (nRead != 2)
+			{
+				PrintError("%s file scanf err", enemyFilenames[i]);
+				return false;
+			}
+		}
+
+		enemy_AddInfo(hp, movingPatternIdx - 1, shotInterval, shotRandom, nBullets, dirBullet);
 		fclose(pFile);
 	}
 
@@ -281,7 +261,7 @@ bool loadMovingPatternInfo()
 	int fpsInterval;
 	int nLength;
 	COORD coordList[MAX_COORD_LIST_LENGTH];
-	
+
 	// ============================ //
 	// read each movepattern files  //
 	// ============================ //
@@ -310,10 +290,14 @@ bool loadMovingPatternInfo()
 				PrintError("%s file fscanf err\n", patternFilenames[i]);
 				fclose(pFile);
 				return false;
-			}
+			}			
 		}
 
-		mp_AddPattern(fpsInterval, nLength, coordList);
+		if (!mp_AddPattern(fpsInterval, nLength, coordList))
+		{
+			fclose(pFile);
+			return false;
+		}
 
 		fclose(pFile);
 	}
@@ -321,5 +305,113 @@ bool loadMovingPatternInfo()
 	return true;
 }
 
+static bool loadTitle()
+{
+	extern char g_TitleScreen[SCREEN_HEIGHT][SCREEN_WIDTH];
 
+	memset(g_TitleScreen, ' ', sizeof(g_TitleScreen));
+	for (int i = 0; i < SCREEN_HEIGHT; ++i)
+	{
+		g_TitleScreen[i][SCREEN_WIDTH - 1] = '\0';
+	}
 
+	FILE* pFile;
+	errno_t err = fopen_s(&pFile, "res/TitleScreen.txt", "r");
+	if (err != 0)
+	{
+		PrintError("title file open err\n");
+		return false;
+	}
+
+	char buffer[128];
+	size_t length;
+	int line = 0;
+
+	while (!feof(pFile))
+	{
+		if (!util_ReadLineInFile(pFile, buffer, _countof(buffer), &length))
+		{
+			fclose(pFile);
+			return false;
+		}
+
+		memcpy_s(g_TitleScreen[line++], SCREEN_WIDTH, buffer, length);
+	}
+
+	fclose(pFile);
+	return true;
+}
+
+static bool loadLoseScreen()
+{
+	extern char g_LoseScreen[SCREEN_HEIGHT][SCREEN_WIDTH];
+
+	memset(g_LoseScreen, ' ', sizeof(g_LoseScreen));
+	for (int i = 0; i < SCREEN_HEIGHT; ++i)
+	{
+		g_LoseScreen[i][SCREEN_WIDTH - 1] = '\0';
+	}
+
+	FILE* pFile;
+	errno_t err = fopen_s(&pFile, "res/LoseScreen.txt", "r");
+	if (err != 0)
+	{
+		PrintError("title file open err\n");
+		return false;
+	}
+
+	char buffer[128];
+	size_t length;
+	int line = 0;
+
+	while (!feof(pFile))
+	{
+		if (!util_ReadLineInFile(pFile, buffer, _countof(buffer), &length))
+		{
+			fclose(pFile);
+			return false;
+		}
+
+		memcpy_s(g_LoseScreen[line++], SCREEN_WIDTH, buffer, length);
+	}
+
+	fclose(pFile);
+	return true;
+}
+
+static bool loadWinScreen()
+{
+	extern char g_WinScreen[SCREEN_HEIGHT][SCREEN_WIDTH];
+
+	memset(g_WinScreen, ' ', sizeof(g_WinScreen));
+	for (int i = 0; i < SCREEN_HEIGHT; ++i)
+	{
+		g_WinScreen[i][SCREEN_WIDTH - 1] = '\0';
+	}
+
+	FILE* pFile;
+	errno_t err = fopen_s(&pFile, "res/WinScreen.txt", "r");
+	if (err != 0)
+	{
+		PrintError("title file open err\n");
+		return false;
+	}
+
+	char buffer[128];
+	size_t length;
+	int line = 0;
+
+	while (!feof(pFile))
+	{
+		if (!util_ReadLineInFile(pFile, buffer, _countof(buffer), &length))
+		{
+			fclose(pFile);
+			return false;
+		}
+
+		memcpy_s(g_WinScreen[line++], SCREEN_WIDTH, buffer, length);
+	}
+
+	fclose(pFile);
+	return true;
+}

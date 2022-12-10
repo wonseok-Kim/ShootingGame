@@ -17,15 +17,12 @@ long util_GetFileSize(FILE* pFile)
 
 bool util_ReadLineInFile(FILE* pFile, char* buffer, int bufferCount, size_t* out_nRead)
 {
-	do
+	if (!fgets(buffer, bufferCount, pFile))
 	{
-		if (!fgets(buffer, bufferCount, pFile))
-		{
-			PrintError("fgets error\n");
-			DebugBreak();
-			return false;
-		}
-	} while (strncmp(buffer, "//", 2) == 0);
+		PrintError("fgets error\n");
+		DebugBreak();
+		return false;
+	}
 
 	char* pNewLine = strchr(buffer, '\n');
 	if (pNewLine)
@@ -33,16 +30,10 @@ bool util_ReadLineInFile(FILE* pFile, char* buffer, int bufferCount, size_t* out
 		*pNewLine = '\0';
 	}
 
-	char* comment = strstr(buffer, "//");
-	if (comment)
-	{
-		*comment = '\0';
-	}
-
 	*out_nRead = strlen(buffer);
-	if (*out_nRead > dfSCREEN_WIDTH - 1)
+	if (*out_nRead > SCREEN_WIDTH - 1)
 	{
-		PrintError("dfSCREEN_WIDTH 범위를 넘어선 표현\n");		
+		PrintError("dfSCREEN_WIDTH 범위를 넘어선 표현\n");
 		return false;
 	}
 
@@ -53,7 +44,7 @@ bool util_ReadLineInFile(FILE* pFile, char* buffer, int bufferCount, size_t* out
 // [min, max] 랜덤 값 반환
 int util_randInt(int min, int max)
 {
-	float random = (float) rand() / RAND_MAX;
+	float random = (float)rand() / RAND_MAX;
 
-	return min + (int) (random * (max - min));
+	return min + (int)(random * (max - min));
 }

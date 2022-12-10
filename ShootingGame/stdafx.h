@@ -26,8 +26,8 @@
 { \
     if (!(expr)) \
     { \
-        printf(msg); \
-        assert(expr); \
+        printf((msg)); \
+        assert((expr)); \
     } \
 } while (false)
 

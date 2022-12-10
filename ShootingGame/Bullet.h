@@ -25,4 +25,4 @@ bool bullet_PlayerShot(const Player* pPlayer);
 bool bullet_Shot(const Object* pObject, eBulletFlag flag);
 
 void bullet_Clear();
-void bullet_Update();
+void bullet_Update(DWORD frameCount, bool* out_bGameEnd);

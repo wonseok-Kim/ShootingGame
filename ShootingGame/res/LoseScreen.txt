@@ -1,0 +1,4 @@
+Game Lose
+
+A: retry same stage
+B: go to main title

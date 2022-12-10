@@ -1,15 +1,12 @@
 #pragma once
 
-#define TEST_HEIGHT (24 + 1 + 2)
-
-#define dfSCREEN_WIDTH		(81)		// 콘솔 가로 80칸 + NULL
-#define dfSCREEN_HEIGHT		(24)		// 콘솔 세로 24칸
+#define SCREEN_WIDTH		(81)		// 콘솔 가로 80칸 + NULL
+#define SCREEN_HEIGHT		(24)		// 콘솔 세로 24칸
+#define TOTAL_HEIGHT        (24 + 2)	// 상하에 기타 정보들 출력 용도
 
 struct Console
 {	
-	int top = 1;
-	int bottom = 2;
-	char screenBuffer[TEST_HEIGHT][dfSCREEN_WIDTH];
+	char screenBuffer[TOTAL_HEIGHT][SCREEN_WIDTH];
 };
 
 void cs_Init(void);
@@ -19,7 +16,8 @@ void cs_ClearScreen(void);
 void cs_FlipBuffer(void);
 void cs_ClearBuffer(void);
 void cs_DrawSprite(int iX, int iY, char chSprite);
-void cs_AllClear();
 
 void cs_SetTopInfoBuffer(const char* format, ...);
+void cs_SetBottomInfoBuffer(const char* format, ...);
+
 

@@ -29,22 +29,29 @@ static bool nextBlankIdx()
 
 bool bullet_EnemyShot(const Enemy* pEnemy)
 {
-	Bullet* pBullet = &g_Bullets[g_idxBlankBullet];
+	extern EnemyInfo g_EnemyInfoList[MAX_ENEMY_INFOS];
 
-	pBullet->flag = eBulletFlag_EnemyShot;	
+	EnemyInfo* pEnemyInfo = &g_EnemyInfoList[pEnemy->infoIdx];
 
-	pBullet->obj.visible = true;
-	pBullet->obj.x = pEnemy->obj.x;
-	pBullet->obj.y = pEnemy->obj.y;
-	pBullet->obj.sprite = '*';
-
-	pBullet->dir.X = 0;
-	pBullet->dir.Y = 1;
-
-	if (!nextBlankIdx())
+	for (int i = 0; i < pEnemyInfo->nBullets; ++i)
 	{
-		PrintError("총알 개수 꽉참.\n");
-		return false;
+		Bullet* pBullet = &g_Bullets[g_idxBlankBullet];
+
+		pBullet->flag = eBulletFlag_EnemyShot;
+
+		pBullet->obj.visible = true;
+		pBullet->obj.x = pEnemy->obj.x;
+		pBullet->obj.y = pEnemy->obj.y;
+		pBullet->obj.sprite = '*';
+
+		pBullet->dir.X = pEnemyInfo->dirBullet[i].X;
+		pBullet->dir.Y = pEnemyInfo->dirBullet[i].Y;
+
+		if (!nextBlankIdx())
+		{
+			PrintError("총알 개수 꽉참.\n");
+			return false;
+		}
 	}
 	return true;
 }
@@ -109,77 +116,81 @@ void bullet_Clear()
 	}
 }
 
-void bullet_Update()
+void bullet_Update(DWORD frameCount, bool* out_bGameEnd)
 {
-	static DWORD frameCount = 0;
-
 	extern Game g_Game;
 
 	Enemy* pEnemyList = g_Game.stage.enemyList;
 	Player* pPlayer = &g_Game.stage.player;
 
-	++frameCount;
-
-	for (int i = 0; i < MAX_BULLETS; ++i)
+	for (int iBullets = 0; iBullets < MAX_BULLETS; ++iBullets)
 	{
-		if (!g_Bullets[i].obj.visible)
+		if (!g_Bullets[iBullets].obj.visible)
 		{
 			continue;
 		}
 
-		if (frameCount % 2 == 0)
+		if (frameCount % 4 == 0)
 		{
-			g_Bullets[i].obj.x += g_Bullets[i].dir.X;
-			g_Bullets[i].obj.y += g_Bullets[i].dir.Y;
+			g_Bullets[iBullets].obj.x += g_Bullets[iBullets].dir.X;
+			g_Bullets[iBullets].obj.y += g_Bullets[iBullets].dir.Y;
 		}
 
-		if (g_Bullets[i].flag == eBulletFlag_EnemyShot)
+		if (g_Bullets[iBullets].flag == eBulletFlag_EnemyShot)
 		{ 
-			if (pPlayer->obj.x == g_Bullets[i].obj.x &&
-				pPlayer->obj.y == g_Bullets[i].obj.y)
+			if (pPlayer->obj.x == g_Bullets[iBullets].obj.x &&
+				pPlayer->obj.y == g_Bullets[iBullets].obj.y &&
+				pPlayer->bHitted == false)
 			{
 				Assert(pPlayer->hp > 0, "hp 이상");
 
 				--pPlayer->hp;
 				if (pPlayer->hp == 0)
 				{
-					// TODO: 패배 처리
-					g_Game.scene = eScene_Title;
+					g_Game.scene = eScene_Lose;
+					*out_bGameEnd = true;
+					cs_ClearScreen();
+					return;
+				}
+				else
+				{
+					pPlayer->bHitted = true;
 				}
 
-				g_Bullets[i].obj.visible = false;
+				g_Bullets[iBullets].obj.visible = false;
 			}
 		}
-		if (g_Bullets[i].flag == eBulletFlag_PlayerShot)
+		if (g_Bullets[iBullets].flag == eBulletFlag_PlayerShot)
 		{
-			for (int j = 0; j < MAX_ENEMIES; ++j)
+			for (int iEnemies = 0; iEnemies < MAX_ENEMIES; ++iEnemies)
 			{
-				if (pEnemyList[j].obj.visible == false)
+				if (pEnemyList[iEnemies].obj.visible == false)
 				{
 					continue;
 				}
 
-				if (pEnemyList[j].obj.x == g_Bullets[i].obj.x &&
-					pEnemyList[j].obj.y == g_Bullets[i].obj.y)
+				if (pEnemyList[iEnemies].obj.x == g_Bullets[iBullets].obj.x &&
+					pEnemyList[iEnemies].obj.y == g_Bullets[iBullets].obj.y)
 				{
-					Assert(pEnemyList[j].hp > 0, "hp 이상");
+					Assert(pEnemyList[iEnemies].hp > 0, "hp 이상");
 
-					--pEnemyList[j].hp;
-					if (pEnemyList[j].hp == 0)
+					--pEnemyList[iEnemies].hp;
+					if (pEnemyList[iEnemies].hp == 0)
 					{
 						--g_Game.stage.nEnemies;
-						pEnemyList[j].obj.visible = false;
+						pEnemyList[iEnemies].obj.visible = false;
 					}
 
-					g_Bullets[j].obj.visible = false;
+					g_Bullets[iBullets].obj.visible = false;
+					break;
 				}
 			}
 		}
 
-		if ((g_Bullets[i].obj.x < 0 || g_Bullets[i].obj.x >= dfSCREEN_WIDTH - 1) ||
-			(g_Bullets[i].obj.y < 0 || g_Bullets[i].obj.y >= dfSCREEN_HEIGHT))
+		if ((g_Bullets[iBullets].obj.x < 0 || g_Bullets[iBullets].obj.x >= SCREEN_WIDTH - 1) ||
+			(g_Bullets[iBullets].obj.y < 0 || g_Bullets[iBullets].obj.y >= SCREEN_HEIGHT))
 		{
-			g_Bullets[i].obj.visible = false;
+			g_Bullets[iBullets].obj.visible = false;
 		}		
 	}
 }

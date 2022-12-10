@@ -1,10 +1,11 @@
-
 #include "stdafx.h"
 
 #include "Game.h"
-#include "Title.h"
+#include "Screen.h"
 
 #pragma comment(lib, "winmm")
+
+extern
 
 int main(void)
 {
@@ -22,7 +23,15 @@ int main(void)
 		switch (g_Game.scene)
 		{
 		case eScene_Title:
-			title_Update();
+			titleScreen_Update();
+			break;
+
+		case eScene_Win:
+			winScreen_Update();
+			break;
+
+		case eScene_Lose:
+			loseScreen_Update();
 			break;
 
 		case eScene_Load:
@@ -38,11 +47,7 @@ int main(void)
 		}
 	}
 
-
-
 	timeEndPeriod(1);
-
-	gm_Release();
 	
 	return 0;
 }

@@ -35,7 +35,7 @@ void cs_FlipBuffer(void)
 {
 	int iCnt;
 
-	for (iCnt = 0; iCnt < TEST_HEIGHT; iCnt++)
+	for (iCnt = 0; iCnt < TOTAL_HEIGHT; iCnt++)
 	{
 		cs_MoveCursor(0, iCnt);
 		printf(s_Console.screenBuffer[iCnt]);
@@ -45,41 +45,40 @@ void cs_FlipBuffer(void)
 void cs_ClearBuffer(void)
 {
 	int iCnt;
-	memset(&s_Console.screenBuffer[s_Console.top], ' ', dfSCREEN_WIDTH * dfSCREEN_HEIGHT);
+	memset(&s_Console.screenBuffer[1], ' ', SCREEN_WIDTH * SCREEN_HEIGHT);
 		
-	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
+	for (iCnt = 0; iCnt < SCREEN_HEIGHT; iCnt++)
 	{
-		s_Console.screenBuffer[iCnt + s_Console.top][dfSCREEN_WIDTH - 1] = '\0';
-	}
-
-}
-
-void cs_AllClear()
-{
-	int iCnt;
-	memset(s_Console.screenBuffer, ' ', dfSCREEN_WIDTH * TEST_HEIGHT);
-
-	for (iCnt = 0; iCnt < TEST_HEIGHT; iCnt++)
-	{
-		s_Console.screenBuffer[iCnt][dfSCREEN_WIDTH - 1] = '\0';
+		s_Console.screenBuffer[iCnt + 1][SCREEN_WIDTH - 1] = '\0';
 	}
 }
 
 void cs_DrawSprite(int iX, int iY, char chSprite)
 {
-	if (iX < 0 || iY < 0 || iX >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)
+	if (iX < 0 || iY < 0 || iX >= SCREEN_WIDTH - 1 || iY >= SCREEN_HEIGHT)
 		return;
 	
-	s_Console.screenBuffer[iY + s_Console.top][iX] = chSprite;
+	s_Console.screenBuffer[iY + 1][iX] = chSprite;
 }
 
 void cs_SetTopInfoBuffer(const char* format, ...)
 {
-	memset(s_Console.screenBuffer[0], ' ', dfSCREEN_WIDTH);
-	s_Console.screenBuffer[0][dfSCREEN_WIDTH - 1] = '\0';
-
 	va_list args;	
 	va_start(args, format);
-	vsprintf_s(s_Console.screenBuffer[0], dfSCREEN_WIDTH, format, args);
+	int length = vsprintf_s(s_Console.screenBuffer[0], SCREEN_WIDTH, format, args);
 	va_end(args);
+
+	memset(&s_Console.screenBuffer[0][length], ' ', SCREEN_WIDTH - length);	
+	s_Console.screenBuffer[0][SCREEN_WIDTH - 1] = '\0';
+}
+
+void cs_SetBottomInfoBuffer(const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	int length = vsprintf_s(s_Console.screenBuffer[TOTAL_HEIGHT - 1], SCREEN_WIDTH, format, args);
+	va_end(args);
+
+	memset(&s_Console.screenBuffer[TOTAL_HEIGHT - 1][length], ' ', SCREEN_WIDTH - length);
+	s_Console.screenBuffer[0][SCREEN_WIDTH - 1] = '\0';
 }

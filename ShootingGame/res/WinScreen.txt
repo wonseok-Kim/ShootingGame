@@ -1,0 +1,4 @@
+congratulation
+
+A: go to main
+B: exit

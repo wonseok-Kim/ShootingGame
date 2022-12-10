@@ -8,11 +8,9 @@
 struct Enemy
 {
 	Object obj;
+	int infoIdx;
 	int hp;
-	int movingPatternType;
-	int movingPatternIdx;
-	int shotInterval; // fps ¥‹¿ß
-	int shotRandom; // 0 ~ 100%
+	int movingPatternIdx;	
 };
 
 struct EnemyInfo
@@ -21,13 +19,11 @@ struct EnemyInfo
 	int movingPatternType;
 	int shotInterval;
 	int shotRandom;
+	int nBullets;
+	COORD dirBullet[9];
 };
 
-bool enemy_AddInfo(int hp, int movingPatternType, int shotInterval, int shotRandom);
-void enemy_GetInfo(int enemyInfoIdx,
-	int* out_hp,
-	int* out_movingPatternType,
-	int* out_shotInterval,
-	int* out_shotRandom);
+bool enemy_AddInfo(int hp, int movingPatternType, int shotInterval, int shotRandom, int nBullets, COORD* dirBullet);
+void enemy_GetInfo(int enemyInfoIdx, int* out_hp);
 
-void enemy_Update();
+void enemy_Update(DWORD frameCount);

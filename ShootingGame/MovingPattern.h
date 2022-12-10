@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAX_COORD_LIST_LENGTH (30)
+#define MAX_COORD_LIST_LENGTH (65)
 
 struct MovingPattern
 {

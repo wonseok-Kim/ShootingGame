@@ -9,90 +9,179 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{1eda20d3-3c66-44fa-80f9-feeb3dec659d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Enemy">
+      <UniqueIdentifier>{a5c979fb-173c-447c-a576-0cd092fcdd1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\movePattern">
+      <UniqueIdentifier>{16796153-5ad4-464b-b583-a20aa2cc6c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Stage">
+      <UniqueIdentifier>{1d460e7c-1690-4650-b644-5da6b7e0f647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="etc">
+      <UniqueIdentifier>{294ae9b4-be6d-4ed2-82cb-311855563ad1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MovingPattern.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingPattern.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>etc</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceLoader.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Console.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Bullet.h">
+      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MovingPattern.h">
-      <Filter>Source Files</Filter>
+      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Source Files</Filter>
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingPattern.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>etc</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
-      <Filter>Source Files</Filter>
+      <Filter>etc</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Screen.h">
+      <Filter>etc</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\LoseScreen.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="res\TitleScreen.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="res\WinScreen.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy1.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy2.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy3.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy4.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy5.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy6.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy7.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy8.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy9.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\Enemy10.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Enemy\EnemyInfo.txt">
+      <Filter>Resource Files\Enemy</Filter>
+    </Text>
+    <Text Include="res\Pattern\MovePattern1.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Pattern\MovePattern2.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Pattern\MovePattern3.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Pattern\MovePattern4.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Pattern\MovePattern5.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Pattern\movePattern6.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Pattern\MovePattern7.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Pattern\MovePatternInfo.txt">
+      <Filter>Resource Files\movePattern</Filter>
+    </Text>
+    <Text Include="res\Stage\Stage1.txt">
+      <Filter>Resource Files\Stage</Filter>
+    </Text>
+    <Text Include="res\Stage\Stage2.txt">
+      <Filter>Resource Files\Stage</Filter>
+    </Text>
+    <Text Include="res\Stage\Stage3.txt">
+      <Filter>Resource Files\Stage</Filter>
+    </Text>
+    <Text Include="res\Stage\StageInfo.txt">
+      <Filter>Resource Files\Stage</Filter>
+    </Text>
   </ItemGroup>
 </Project>
